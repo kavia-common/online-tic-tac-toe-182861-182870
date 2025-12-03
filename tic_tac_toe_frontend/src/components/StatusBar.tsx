@@ -7,13 +7,15 @@ export interface StatusBarProps {
 
 // PUBLIC_INTERFACE
 export default component$<StatusBarProps>(({ state }) => {
+  const human = (p: "X" | "O") => (p === "X" ? "Knight" : "Queen");
+
   let message = "";
   if (state.winner) {
-    message = `Player ${state.winner} wins!`;
+    message = `${human(state.winner)} wins!`;
   } else if (state.isDraw) {
     message = "It's a draw!";
   } else {
-    message = `Player ${state.currentPlayer}'s turn`;
+    message = `${human(state.currentPlayer)}'s turn`;
   }
 
   const statusType: "info" | "success" | "error" = state.winner

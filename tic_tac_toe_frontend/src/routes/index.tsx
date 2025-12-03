@@ -16,18 +16,19 @@ const STORAGE_KEY = "ttt_qwik_state_v1";
 // PUBLIC_INTERFACE
 export default component$(() => {
   const stateSig = useSignal<GameState>(initialGameState());
-  const announceSig = useSignal<string>("Welcome to Tic Tac Toe. Player X starts.");
+  const announceSig = useSignal<string>("Welcome to Tic Tac Toe. Knight starts.");
 
   // Load from localStorage in browser
   useVisibleTask$(() => {
     const persisted = deserializeState(localStorage.getItem(STORAGE_KEY));
     if (persisted) {
       stateSig.value = persisted;
+      const human = (p: "X" | "O") => (p === "X" ? "Knight" : "Queen");
       announceSig.value = persisted.winner
-        ? `Resumed game. Player ${persisted.winner} had already won.`
+        ? `Resumed game. ${human(persisted.winner)} had already won.`
         : persisted.isDraw
         ? "Resumed game. It was a draw."
-        : `Resumed game. Player ${persisted.currentPlayer}'s turn.`;
+        : `Resumed game. ${human(persisted.currentPlayer)}'s turn.`;
     }
   });
 
@@ -45,11 +46,12 @@ export default component$(() => {
     const next = makeMove(stateSig.value, index);
     if (next !== stateSig.value) {
       stateSig.value = next;
+      const human = (p: "X" | "O") => (p === "X" ? "Knight" : "Queen");
       announceSig.value = next.winner
-        ? `Player ${next.winner} wins!`
+        ? `${human(next.winner)} wins!`
         : next.isDraw
         ? "It's a draw!"
-        : `Player ${next.currentPlayer}'s turn.`;
+        : `${human(next.currentPlayer)}'s turn.`;
     }
   });
 
@@ -64,13 +66,13 @@ export default component$(() => {
       isDraw: false,
       moves: 0,
     };
-    announceSig.value = `Board reset. Player ${starting}'s turn.`;
+    announceSig.value = `Board reset. ${(starting === "X" ? "Knight" : "Queen")}'s turn.`;
   });
 
   const handleNewGame$ = $(() => {
     // Start a brand new game with X starting
     stateSig.value = initialGameState();
-    announceSig.value = "New game started. Player X's turn.";
+    announceSig.value = "New game started. Knight's turn.";
   });
 
   const disabled = !!stateSig.value.winner || stateSig.value.isDraw;
@@ -108,7 +110,7 @@ export default component$(() => {
         <section class="help">
           <h2 class="help__title">How to play</h2>
           <p class="help__text">
-            Two players take turns. Player X starts. Click or press Enter/Space on an empty cell to place your mark.
+            Two players take turns. Knight starts. Click or press Enter/Space on an empty cell to place your mark.
             Get three in a row horizontally, vertically, or diagonally to win.
           </p>
         </section>

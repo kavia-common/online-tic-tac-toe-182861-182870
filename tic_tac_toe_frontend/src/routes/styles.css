@@ -169,6 +169,20 @@ body {
 
 .cell__content {
   transform: translateZ(0);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.icon {
+  width: 1.6em;
+  height: 1.6em;
+  color: var(--color-text);
+}
+
+.cell--win .icon {
+  color: var(--color-primary);
 }
 
 /* Actions */
